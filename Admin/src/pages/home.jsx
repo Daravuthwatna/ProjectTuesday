@@ -1,7 +1,7 @@
 import Navbar from '../components/utils/navbar.jsx'
 import Sidebar from '../components/utils/sidebar.jsx'
 
-const App = () => {
+const Home = () => {
   return (
     <div className='container-fluid vh-100 vw-100'>
       <div className="row">
@@ -16,7 +16,7 @@ const App = () => {
               <Sidebar/>
             </div>
             <div className='col-lg-10'>
-              
+              <h1>Admin Home Page</h1>
             </div>
           </div>
         </div>
@@ -25,4 +25,4 @@ const App = () => {
   )
 }
 
-export default App
+export default Home

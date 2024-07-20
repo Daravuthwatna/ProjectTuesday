@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useUser } from "../context/userContext";
 
 const Login = () => {
   const [data, setData] = useState({ login_name: '', password: '' });
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
@@ -17,6 +19,8 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/login/user', data);
       console.log('Login Successfully', response.data);
+      setUser(response.data.user);
+      localStorage.setItem('user', JSON.stringify(response.data.user)); // Store user data in local storage
       navigate('/home');
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -38,7 +42,6 @@ const Login = () => {
               {error && <div className="alert alert-danger">{error}</div>}
               <form onSubmit={handleSubmit}>
                 <div className="form-group mb-3">
-                  <label htmlFor="login_name">Username</label>
                   <input
                     type="text"
                     className="form-control"
@@ -52,7 +55,6 @@ const Login = () => {
                   />
                 </div>
                 <div className="form-group mb-4 position-relative">
-                  <label htmlFor="password">Password</label>
                   <div className="input-group">
                     <input
                       type={showPassword ? "text" : "password"}

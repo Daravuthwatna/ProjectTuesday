@@ -147,10 +147,11 @@ const UpdateItem = () => {
                           required
                         >
                           <option value="">Select Unit</option>
-                          <option value="1">Cans</option>
+                          <option value="1">Can</option>
                           <option value="2">Bottle</option>
                           <option value="3">Liter</option>
                           <option value="4">Kilogram</option>
+                          <option value="5">Pice</option>
                         </select>
                       </div>
                       <div className="form-group mt-3">

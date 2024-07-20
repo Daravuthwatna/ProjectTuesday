@@ -12,14 +12,14 @@ import UpdatePosi from './components/position/updatePosition.jsx';
 import CreateItem from './components/Item/createItem.jsx';
 import UpdateItem from './components/Item/updateItem.jsx'
 import Login from './pages/Login.jsx'
-import Homme from './pages/home.jsx'
+import Home from './pages/home.jsx'
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login/>} />
-        <Route path='/home' element={<Homme/>}/>
+        <Route path='/home' element={<Home/>}/>
         <Route path='/department' element={<CreateDepartment/>}/>
         <Route path='/department/update/:id' element={<UpdateDepartment/>}/>
         <Route path='/category' element={<CreateCategory/>}/>

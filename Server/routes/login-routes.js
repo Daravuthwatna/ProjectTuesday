@@ -22,7 +22,6 @@ router.post('/admin', (req, res) => {
 router.post('/user', (req, res) => {
   const { login_name, password } = req.body;
   const sql = 'SELECT * FROM `tbuser` WHERE `login_name` = ? AND `password` = ? AND `user_status` = 5 AND `level` = 3';
-
   db.query(sql, [login_name, password], (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Internal Server Error' });

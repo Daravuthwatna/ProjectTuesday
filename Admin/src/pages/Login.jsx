@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAdmin } from '../context/adminContext.jsx';
 
 const Login = () => {
   const [data, setData] = useState({ login_name: '', password: '' });
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { setAdmin } = useAdmin();
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
@@ -16,7 +18,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/login/admin', data);
-      console.log('Login Successfully', response);
+      console.log('Login Successfully', response.data);
+      setAdmin(response.data.user); // Assuming the server returns { admin: admin }
+      localStorage.setItem('user', JSON.stringify(response.data.user)); // Store user data in local storage
       navigate('/home');
     } catch (error) {
       setError('Invalid Admin Name or Password');
@@ -34,7 +38,6 @@ const Login = () => {
               {error && <div className="alert alert-danger">{error}</div>}
               <form onSubmit={handleSubmit}>
                 <div className="form-group mb-3">
-                  <label htmlFor="login_name">Username</label>
                   <input
                     type="text"
                     className="form-control"
@@ -46,7 +49,6 @@ const Login = () => {
                   />
                 </div>
                 <div className="form-group mb-4 position-relative">
-                  <label htmlFor="password">Password</label>
                   <div className="input-group">
                     <input
                       type={showPassword ? 'text' : 'password'}

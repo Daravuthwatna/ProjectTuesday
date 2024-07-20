@@ -1,0 +1,12 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+  /* overflow-x: hidden; */
+  /* background-color: rgb(150, 150, 150);
+  color: white; */
+}
+*::-webkit-scrollbar{
+  display: none;
+}

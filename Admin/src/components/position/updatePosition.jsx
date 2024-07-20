@@ -91,7 +91,7 @@ const UpdatePosition = () => {
                         <button type="submit" className="btn btn-success m-3">
                           Update Position
                         </button>
-                        <Link to="/positions">
+                        <Link to="/position">
                           <button
                             type="button"
                             className="btn btn-secondary m-3"

@@ -51,6 +51,16 @@ router.get('/allUser', (req, res) => {
   });
 });
 
+router.get('/clientUser', (req, res) => {
+  const sql = 'SELECT * FROM tbuser WHERE `del_dtime` IS NULL AND level = 3';
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error fetching User', error: err });
+    }
+    return res.status(200).json({ result });
+  });
+})
+
 router.get('/getUser/:id', (req, res) => {
   const id = req.params.id;
   const sql = 'SELECT * FROM tbuser WHERE user_id = ?';

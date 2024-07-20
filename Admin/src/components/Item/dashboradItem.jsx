@@ -82,7 +82,7 @@ const DashboardItem = () => {
               <th>Quantity</th>
               <th>Price/One</th>
               <th>Total</th>
-              <th>Date</th>
+              {/* <th>Date</th> */}
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -96,9 +96,9 @@ const DashboardItem = () => {
                   <td>{status[item.status] || "Unknown"}</td>
                   <td>{category[item.category] || "Unknown"}</td>
                   <td>{item.quantity}</td>
-                  <td>{item.price}</td>
-                  <td>{item.price * item.quantity}</td>
-                  <td>{item.reg_dtime}</td>
+                  <td>{item.price} $</td>
+                  <td>{item.price * item.quantity} $</td>
+                  {/* <td>{item.reg_dtime}</td> */}
                   <td>
                     <Link to={`/item/update/${item.item_id}`}>
                       <button className="btn btn-primary">

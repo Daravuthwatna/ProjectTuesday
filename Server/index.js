@@ -8,6 +8,7 @@ const userRouter = require('./routes/user-routes');
 const positionRouter = require('./routes/position-routes');
 const loginRouter = require('./routes/login-routes');
 const itemRouter = require('./routes/item-routes');
+const requestRouter = require('./routes/request-routes');
 
 require('dotenv').config();
 
@@ -41,6 +42,7 @@ const server = () => {
   app.use('/positions', positionRouter);
   app.use('/login', loginRouter);
   app.use('/items', itemRouter);
+  app.use('/requests', requestRouter);
 };
 
 server();
