@@ -11,8 +11,9 @@ import CreatePosi from './components/position/createPosition.jsx';
 import UpdatePosi from './components/position/updatePosition.jsx';
 import CreateItem from './components/Item/createItem.jsx';
 import UpdateItem from './components/Item/updateItem.jsx'
-import Login from './pages/Login.jsx'
-import Home from './pages/home.jsx'
+import Login from './pages/Login.jsx';
+import Home from './pages/home.jsx';
+import Notification from './pages/Notification.jsx';
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
         <Route path='/position/update/:id' element={<UpdatePosi/>}/>
         <Route path='/item' element={<CreateItem/>}/>
         <Route path='/item/update/:id' element={<UpdateItem/>}/>
+        <Route path='/notification' element={<Notification/>}/>
       </Routes>
     </BrowserRouter>
   )

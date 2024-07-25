@@ -36,7 +36,7 @@ const CreateRequest = () => {
 
   const fetchItem = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/requests/item");
+      const response = await axios.get("http://localhost:5000/requests/itemInactive");
       setItem(response.data.result);
     } catch (error) {
       console.log("Error fetching Item", error);
@@ -56,7 +56,7 @@ const CreateRequest = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/requests/user");
+      const response = await axios.get("http://localhost:5000/requests/userInactive");
       setUser(response.data.result);
     } catch (error) {
       console.log("Error fetching user data", error);
@@ -84,15 +84,15 @@ const CreateRequest = () => {
     e.preventDefault();
     try {
       const responseRequest = await axios.post(
-        "http://localhost:5000/requests/addRequest",
+        "http://localhost:5000/stock/addRequest",
         request
       );
       console.log("Request added successfully...", responseRequest);
 
-      const requestID = responseRequest.data.request_id; // Assuming the request ID is returned in the response
+      const requestID = responseRequest.data.request_id; 
 
       const responseDetail = await axios.post(
-        "http://localhost:5000/requests/addRequestDetail",
+        "http://localhost:5000/stock/addRequestDetail",
         { ...requestDetail, request_id: requestID }
       );
       console.log("Request detail added successfully...", responseDetail);
@@ -133,22 +133,6 @@ const CreateRequest = () => {
                       />
                       <div className="form-group mt-3">
                         <select
-                          name="department_id"
-                          className="form-control"
-                          value={request.department_id}
-                          onChange={handleChange}
-                          required
-                        >
-                          <option value="">Select Department</option>
-                          {department.map((dept) => (
-                            <option key={dept.department_id} value={dept.department_id}>
-                              {dept.department_name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="form-group mt-3">
-                        <select
                           name="user_id"
                           onChange={handleChange}
                           className="form-control"
@@ -175,6 +159,49 @@ const CreateRequest = () => {
                         />
                       </div>
                       <div className="form-group mt-3">
+                        <select
+                          name="item_id"
+                          className="form-control"
+                          value={requestDetail.item_id}
+                          onChange={handleDetailChange}
+                          required
+                        >
+                          <option value="">Select Item</option>
+                          {item.map((itm) => (
+                            <option key={itm.item_id} value={itm.item_id}>
+                              {itm.item_name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="form-group mt-3">
+                        <input
+                          type="number"
+                          className="form-control"
+                          placeholder="Quantity"
+                          name="quantity"
+                          value={requestDetail.quantity}
+                          onChange={handleDetailChange}
+                          required
+                        />
+                      </div>
+                      <div className="form-group mt-3">
+                        <select
+                          name="department_id"
+                          className="form-control"
+                          value={request.department_id}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">Select Department</option>
+                          {department.map((dept) => (
+                            <option key={dept.department_id} value={dept.department_id}>
+                              {dept.department_name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="form-group mt-3">
                         <input
                           type="text"
                           className="form-control"
@@ -192,39 +219,13 @@ const CreateRequest = () => {
                           value={request.request_form}
                           onChange={handleChange}
                           rows="4"
-                          cols="50"
                           style={{ resize: "none" }}
                         ></textarea>
                       </div>
                       <hr />
-                      <input
-                        type="number"
-                        className="form-control mt-3"
-                        placeholder="Quantity"
-                        name="quantity"
-                        value={requestDetail.quantity}
-                        onChange={handleDetailChange}
-                        required
-                      />
-                      <div className="form-group mt-3">
-                        <select
-                          name="item_id"
-                          className="form-control"
-                          value={requestDetail.item_id}
-                          onChange={handleDetailChange}
-                          required
-                        >
-                          <option value="">Select Item</option>
-                          {item.map((itm) => (
-                            <option key={itm.item_id} value={itm.item_id}>
-                              {itm.item_name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
                       <div className="form-group mt-3">
                         <button type="submit" className="btn btn-primary mb-2">
-                          Add Request and Details
+                          Add Request
                         </button>
                       </div>
                     </form>

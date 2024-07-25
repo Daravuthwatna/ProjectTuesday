@@ -3,39 +3,39 @@ const { db } = require('../utils/db');
 
 const router = express.Router();
 
-router.post('/addRequest', (req, res) => {
-  const sql = "INSERT INTO tbrequest (request_date, department, requester, remark, request_form, user) VALUES (?, ?, ?, ?, ?, ?)";
-  const values = [
-    req.body.request_date,
-    req.body.department_id,
-    req.body.requester,
-    req.body.remark,
-    req.body.request_form,
-    req.body.user_id
-  ];
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error adding request', err });
-    }
-    const request_id = result.insertId;
-    return res.status(201).json({ success: 'Request added successfully', request_id });
-  });
-});
+// router.post('/addRequest', (req, res) => {
+//   const sql = "INSERT INTO tbrequest (request_date, department, requester, remark, request_form, user) VALUES (?, ?, ?, ?, ?, ?)";
+//   const values = [
+//     req.body.request_date,
+//     req.body.department_id,
+//     req.body.requester,
+//     req.body.remark,
+//     req.body.request_form,
+//     req.body.user_id
+//   ];
+//   db.query(sql, values, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ message: 'Error adding request', err });
+//     }
+//     const request_id = result.insertId;
+//     return res.status(201).json({ success: 'Request added successfully', request_id });
+//   });
+// });
 
-router.post('/addRequestDetail', (req, res) => {
-  const sql = "INSERT INTO `tbrequest_detial` (item_id, quantity, request_id) VALUES (?, ?, ?)";
-  const values = [
-    req.body.item_id,
-    req.body.quantity,
-    req.body.request_id
-  ];
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error adding request detail', err });
-    }
-    return res.status(201).json({ success: 'Request detail added successfully', result });
-  });
-});
+// router.post('/addRequestDetail', (req, res) => {
+//   const sql = "INSERT INTO `tbrequest_detial` (item_id, quantity, request_id) VALUES (?, ?, ?)";
+//   const values = [
+//     req.body.item_id,
+//     req.body.quantity,
+//     req.body.request_id
+//   ];
+//   db.query(sql, values, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ message: 'Error adding request detail', err });
+//     }
+//     return res.status(201).json({ success: 'Request detail added successfully', result });
+//   });
+// });
 
 router.put('/updateRequest/:id', (req, res) => {
   const id = req.params.id;
@@ -68,7 +68,27 @@ router.get('/getRequest/:id', (req, res) => {
   })
 });
 
+router.get('/countRequest', (req, res) => {
+  const sql = 'SELECT COUNT(*) AS total_requests FROM tbrequest r INNER JOIN tbrequest_detial d ON r.request_id = d.request_id INNER JOIN tbitem i ON d.item_id = i.item_id;';
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error fetching requests', err });
+    }
+    return res.status(200).json({ result });
+  });
+});
+
 router.get('/allUserRequest', (req, res) => {
+  const sql = "SELECT r.request_id, r.request_date, r.department, r.requester, r.user, d.request_detail_id, d.item_id, d.quantity FROM tbrequest r INNER JOIN tbrequest_detial d ON r.request_id = d.request_id WHERE del_dtime IS NULL";
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error getting requests', err });
+    }
+    return res.status(200).json({ result });
+  });
+});
+
+router.get('/totalRequest', (req, res) => {
   const sql = "SELECT r.request_id, r.request_date, r.department, r.requester, r.user, d.request_detail_id, d.item_id, d.quantity FROM tbrequest r INNER JOIN tbrequest_detial d ON r.request_id = d.request_id WHERE del_dtime IS NULL";
   db.query(sql, (err, result) => {
     if (err) {
@@ -98,8 +118,28 @@ router.get('/user', (req, res) => {
   });
 });
 
+router.get('/userInactive', (req, res) => {
+  const sql = "SELECT * FROM tbuser WHERE del_dtime IS NULL AND level = 3 AND user_status = 5";
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error fetching users', err });
+    }
+    return res.status(200).json({ result });
+  });
+});
+
 router.get('/item', (req, res) => {
   const sql = 'SELECT * FROM tbitem WHERE del_dtime IS NULL';
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error fetching Item', err });
+    }
+    return res.status(200).json({ result });
+  });
+});
+
+router.get('/itemInactive', (req, res) => {
+  const sql = 'SELECT * FROM tbitem WHERE del_dtime IS NULL AND status = 5';
   db.query(sql, (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Error fetching Item', err });

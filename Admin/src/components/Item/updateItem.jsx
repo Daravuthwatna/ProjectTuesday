@@ -208,7 +208,6 @@ const UpdateItem = () => {
                             setData({ ...data, description: e.target.value })
                           }
                           style={{ resize: "none" }}
-                          required
                         ></textarea>
                       </div>
                       <div className="form-group mt-3">

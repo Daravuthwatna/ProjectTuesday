@@ -10,7 +10,7 @@ const CreateItem = () => {
   const [category, setCategory] = useState([]);
   const [status, setStatus] = useState([]);
   const [regDtime, setRegDtime] = useState("");
-  const [value, setValue] = useState({
+  const [item, setItem] = useState({
     item_name: "",
     unit: "",
     quantity: "",
@@ -21,11 +21,17 @@ const CreateItem = () => {
     reg_dtime: "",
   });
 
+  const [stock, setStock] = useState({
+    stock_date: "",
+    item_id: "",
+    old_qty: "",
+    new_qty: "",
+    reg_dtime: "",
+  });
+
   const fetchCategory = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/items/categories"
-      );
+      const response = await axios.get("http://localhost:5000/items/categories");
       setCategory(response.data.result);
     } catch (error) {
       console.log("Error Fetching Category", error);
@@ -44,21 +50,36 @@ const CreateItem = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/items/addItem",
-        value
-      );
-      console.log("Added successfully...", response);
-      toast.success("Added Successfully!");
+      const response = await axios.post("http://localhost:5000/stock/addItem", item);
+      console.log("Item added successfully...", response);
+      const itemID = response.data.item_id;
+      const stockResponse = await axios.post("http://localhost:5000/stock/addStock", { ...stock, item_id: itemID });
+      console.log("Stock added successfully...", stockResponse);
+      toast.success("Item and Stock added Successfully!");
       setTimeout(() => window.location.reload(), 1500);
     } catch (error) {
       console.log("Add Error...", error);
+      toast.error("Error adding item or stock!");
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setValue((prevValue) => ({
+    setItem((prevValue) => ({
+      ...prevValue,
+      [name]: value,
+    }));
+  };
+
+  const handleStockChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "new_qty") {
+      setItem((prevValue) => ({
+        ...prevValue,
+        quantity: value,
+      }));
+    }
+    setStock((prevValue) => ({
       ...prevValue,
       [name]: value,
     }));
@@ -67,7 +88,8 @@ const CreateItem = () => {
   useEffect(() => {
     const currentDate = new Date().toISOString().split("T")[0];
     setRegDtime(currentDate);
-    setValue((prevValue) => ({ ...prevValue, reg_dtime: currentDate }));
+    setStock((prevValue) => ({ ...prevValue, stock_date: currentDate, reg_dtime: currentDate }));
+    setItem((prevValue) => ({ ...prevValue, reg_dtime: currentDate }));
     fetchCategory();
     fetchStatus();
   }, []);
@@ -105,10 +127,21 @@ const CreateItem = () => {
                       </div>
                       <div className="form-group mt-3">
                         <input
-                          type="number"
+                          type="hidden"
                           className="form-control"
                           name="quantity"
-                          onChange={handleChange}
+                          value={item.quantity}
+                          placeholder="Quantity"
+                          readOnly
+                          required
+                        />
+                      </div>
+                      <div className="form-group mt-3">
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="new_qty"
+                          onChange={handleStockChange}
                           placeholder="Quantity"
                           required
                         />
@@ -136,7 +169,7 @@ const CreateItem = () => {
                           <option value="2">Bottle</option>
                           <option value="3">Liter</option>
                           <option value="4">Kilogram</option>
-                          <option value="5">Pice</option>
+                          <option value="5">Piece</option>
                         </select>
                       </div>
                       <div className="form-group mt-3">
@@ -148,10 +181,7 @@ const CreateItem = () => {
                         >
                           <option value="">Select Status</option>
                           {status.map((status) => (
-                            <option
-                              key={status.status_id}
-                              value={status.status_id}
-                            >
+                            <option key={status.status_id} value={status.status_id}>
                               {status.status}
                             </option>
                           ))}
@@ -166,10 +196,7 @@ const CreateItem = () => {
                         >
                           <option value="">Select Category</option>
                           {category.map((category) => (
-                            <option
-                              key={category.category_id}
-                              value={category.category_id}
-                            >
+                            <option key={category.category_id} value={category.category_id}>
                               {category.category_name}
                             </option>
                           ))}
@@ -184,7 +211,6 @@ const CreateItem = () => {
                           cols="50"
                           style={{ resize: "none" }}
                           onChange={handleChange}
-                          required
                         ></textarea>
                       </div>
                       <div className="form-group mt-3">
@@ -193,7 +219,22 @@ const CreateItem = () => {
                           className="form-control"
                           name="reg_dtime"
                           value={regDtime}
-                          readOnly
+                        />
+                      </div>
+                      <div className="form-group mt-3">
+                        <input
+                          type="hidden"
+                          className="form-control"
+                          name="stock_date"
+                          value={stock.stock_date}
+                        />
+                      </div>
+                      <div className="form-group mt-3">
+                        <input
+                          type="hidden"
+                          className="form-control"
+                          name="reg_dtime"
+                          value={stock.reg_dtime}
                         />
                       </div>
                       <div className="form-group mt-3">

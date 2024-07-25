@@ -3,25 +3,25 @@ const { db } = require('../utils/db');
 
 const router = express.Router();
 
-router.post('/addItem', (req, res) => {
-  const sql = 'INSERT INTO tbitem (item_name, unit, quantity, price, description, status, category, reg_dtime) VALUES (?,?,?,?,?,?,?,?)';
-  const values = [
-    req.body.item_name,
-    req.body.unit,
-    req.body.quantity,
-    req.body.price,
-    req.body.description,
-    req.body.status_id,
-    req.body.category_id,
-    req.body.reg_dtime
-  ];
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error adding item', error: err });
-    }
-    return res.status(201).json({ success: 'Item added successfully', result });
-  });
-});
+// router.post('/addItem', (req, res) => {
+//   const sql = 'INSERT INTO tbitem (item_name, unit, quantity, price, description, status, category, reg_dtime) VALUES (?,?,?,?,?,?,?,?)';
+//   const values = [
+//     req.body.item_name,
+//     req.body.unit,
+//     req.body.quantity,
+//     req.body.price,
+//     req.body.description,
+//     req.body.status_id,
+//     req.body.category_id,
+//     req.body.reg_dtime
+//   ];
+//   db.query(sql, values, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ message: 'Error adding item', error: err });
+//     }
+//     return res.status(201).json({ success: 'Item added successfully', result });
+//   });
+// });
 
 router.get('/statuses', (req, res) => {
   const sql = 'SELECT * FROM tbstatus WHERE del_dtime IS NULL';

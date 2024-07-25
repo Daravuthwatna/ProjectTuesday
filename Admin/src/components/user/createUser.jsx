@@ -18,7 +18,7 @@ const CreateUser = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
-  const [statuses, setStatuses] = useState([]);
+  // const [statuses, setStatuses] = useState([]);
   const [positions, setPositions] = useState([]);
   const [reg_dtime, setRegDtime] = useState("");
 
@@ -60,15 +60,6 @@ const CreateUser = () => {
     }
   };
 
-  const fetchStatuses = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/users/statuses");
-      setStatuses(response.data.result);
-    } catch (error) {
-      console.log("Error fetching statuses", error);
-    }
-  };
-
   const fetchPositions = async () => {
     try {
       const response = await axios.get("http://localhost:5000/users/positions");
@@ -83,7 +74,6 @@ const CreateUser = () => {
     setRegDtime(currentDate);
     setValue((prevValue) => ({ ...prevValue, reg_dtime: currentDate }));
     fetchPositions();
-    fetchStatuses();
   }, []);
 
   return (
@@ -199,14 +189,8 @@ const CreateUser = () => {
                           required
                         >
                           <option value="">Select Status</option>
-                          {statuses.map((status) => (
-                            <option
-                              key={status.status_id}
-                              value={status.status_id}
-                            >
-                              {status.status}
-                            </option>
-                          ))}
+                          <option value="4">Inactive</option>
+                          <option value="5">Active</option>
                         </select>
                       </div>
                       <div className="form-group mt-3">

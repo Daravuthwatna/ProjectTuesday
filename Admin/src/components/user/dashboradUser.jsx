@@ -5,7 +5,10 @@ import { Link } from "react-router-dom";
 const DashboardUser = () => {
   const [allUser, setAllUser] = useState([]);
   const [passwordVisibility, setPasswordVisibility] = useState({});
-  const [statuses, setStatuses] = useState({});
+  const [statuses, setStatuses] = useState({
+    4: "Inactive",
+    5: "Active",
+  });
   const [positions, setPositions] = useState({});
   const [del_dtime, setDelDtime] = useState("");
 
@@ -24,20 +27,6 @@ const DashboardUser = () => {
       console.error("Error fetching users:", error);
     }
   };
-
-  const fetchStatuses = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/users/statuses");
-      const statusMap = response.data.result.reduce((acc, status) => {
-        acc[status.status_id] = status.status;
-        return acc;
-      }, {});
-      setStatuses(statusMap);
-    } catch (error) {
-      console.log("Error fetching statuses", error);
-    }
-  };
-
   const fetchPositions = async () => {
     try {
       const response = await axios.get("http://localhost:5000/users/positions");
@@ -71,7 +60,6 @@ const DashboardUser = () => {
     setDelDtime(currentDate);
     fetchPositions();
     fetchUsers();
-    fetchStatuses();
   }, []);
 
   return (
@@ -85,7 +73,6 @@ const DashboardUser = () => {
               <th>Password</th>
               <th>Level</th>
               <th>Status</th>
-              <th>Registration Date</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -99,7 +86,7 @@ const DashboardUser = () => {
                   <td>
                     {passwordVisibility[user.user_id]
                       ? user.password
-                      : "••••••••"}
+                      : "•••••"}
                     <span
                       onClick={() => togglePasswordVisibility(user.user_id)}
                       style={{ marginLeft: "10px", cursor: "pointer" }}
@@ -113,7 +100,6 @@ const DashboardUser = () => {
                   </td>
                   <td>{positions[user.level] || "Unknown"}</td>
                   <td>{statuses[user.user_status] || "Unknown"}</td>
-                  <td>{user.reg_dtime}</td>
                   <td>
                     <Link to={`/user/update/${user.user_id}`}>
                       <button className="btn btn-primary">
